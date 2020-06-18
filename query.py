@@ -13,6 +13,8 @@ from mysql import OperationalError
 import argparse
 import logging
 import json
+import os
+from pathlib import Path
 
 def connect(user, password, host):
     """ connects to database and returns dict cursor """
@@ -32,6 +34,7 @@ def execute_SQL(filename, cursor):
     """ execute .SQL file of commands """
 
     # open file
+
     file = open(filename, 'r')
     sql = file.read()
     file.close()
@@ -70,5 +73,10 @@ if __name__ == '__main__':
     # execute external sql file
     execute_SQL(args.querypath, cursor)
 
+    # create out path if needed
+    outpath = os.path.dirname(args.outfile)
+    Path(outpath).mkdir(parents=True, exist_ok=True)
+
+    # write json file from query output
     with open(args.outfile, 'w+') as outfile:
         outfile.write(get_JSON_from_cursor(cursor))

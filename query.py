@@ -14,6 +14,19 @@ from mysql import OperationalError
 import argparse
 import logging
 
+def connect(user, password, host):
+    """ connects to database and returns cursor """
+
+    try:
+        cnct = mysql.connector.connect(
+            user=user,
+            password=password,
+            host=host
+        )
+        return cnct.cursor()
+    except mysql.connector.Error as err:
+        logging.error("Connection error: ", err)
+
 def executeSQL(filename, cursor):
     """ execute .SQL file of commands """
 

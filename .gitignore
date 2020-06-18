@@ -1,2 +1,5 @@
 # vscode settings
 /.vscode/
+
+# query results
+/results/

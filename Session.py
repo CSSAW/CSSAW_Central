@@ -1,27 +1,13 @@
 import mysql.connector
+import sqlalchemy as alc
 from mysql.connector.errors import OperationalError
 import logging
 
 class Session:
     def __init__(self, user, password, host, db='Test'):
-        self.user = user
-        self.password = password
-        self.host = host
-        self.db = db
+        self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db))
 
-        self.conn = mysql.connector.connect(
-            user=self.user,
-            password=self.password,
-            host=self.host,
-            database=self.db
-        )
-
-        self.cursor = self.conn.cursor(dictionary=True, buffered=True)
-
-    def __del__(self):
-        pass
-        #self.cursor.close()
-        #self.conn.close()
+        self.conn = self.engine.connect()
 
     def execute_SQL(self, filename):
         """ execute .SQL file of commands """
@@ -35,36 +21,48 @@ class Session:
         # get commands
         commands = sql.split(';')
         commands.pop()
+        
+        results = []
 
         # execute commands
         for command in commands:
             command = command.strip()
             try:
-                self.cursor.execute(command)
-            except mysql.connector.OperationalError:
+                results.append(self.conn.execute(alc.sql.text(command)))
+            except:
                 logging.error('Operation \"' + command + '\" failed, skipping...')
+
+        return results
 
     def insert(self, table, columns, rows):
         """ insert given rows into given table """
 
-        query = 'INSERT INTO %s ' % table + '('
+        # query type
+        query = alc.insert(table)
 
-        # build column substring
-        for column in columns:
-            query = query + column + ', '
-        query = query[:-2] + ') VALUES '
-
-        # build value substring (support for multiple rows)
+        # build list of rows to insert
+        values_list = []
         for row in rows:
-            query += '('
-            for value in row:
-                if value.isnumeric():
-                    query = query + value + ', '
-                else:
-                    query = query + '\'' + value + '\'' + ', '
-            query = query[:-2] + '), '
-        query = query[:-2] + ';'
+            values_list.append(dict(zip(columns, row)))
 
-        logging.debug('Query: %s' % query)
-        self.cursor.execute(query)
-        self.conn.commit()
+        # execute and commit query
+        self.conn.execute(query, values_list)
+
+    def insert_from_CSV(self, filename, table):
+        with open(filename, 'r') as f:
+
+            # pull headers
+            headers = f.readline().split(',')
+
+            # get csv rows
+            lines = f.readlines()
+
+            # convert rows into list of lists
+            rows = [[x.strip()] for x in line.split(',') for line in lines]
+
+            # user insert member function to insert
+            try:
+                self.insert(table, headers, rows)
+            except:
+                logging.error('Insert failed for file: %s' % filename)
+                

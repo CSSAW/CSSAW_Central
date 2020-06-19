@@ -1,4 +1,5 @@
 import mysql.connector
+import sqlalchemy
 from mysql.connector.errors import OperationalError
 import logging
 

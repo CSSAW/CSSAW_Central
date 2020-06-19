@@ -47,3 +47,22 @@ class Session:
 
         # execute and commit query
         self.conn.execute(query, values_list)
+
+    def insert_from_CSV(self, filename, table):
+        with open(filename, 'r') as f:
+
+            # pull headers
+            headers = f.readline().split(',')
+
+            # get csv rows
+            lines = f.readlines()
+
+            # convert rows into list of lists
+            rows = [[x.strip()] for x in line.split(',') for line in lines]
+
+            # user insert member function to insert
+            try:
+                self.insert(table, headers, rows)
+            except:
+                logging.error('Insert failed for file: %s' % filename)
+                

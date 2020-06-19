@@ -7,7 +7,7 @@ CSSAW Python SQL helpers
 in the python shell)
 
 """
-import Session
+from Session import *
 import argparse
 import json
 import os

@@ -49,18 +49,22 @@ class Session:
 
         query = 'INSERT INTO %s ' % table + '('
 
+        # build column substring
         for column in columns:
             query = query + column + ', '
         query = query[:-2] + ') VALUES '
 
+        # build value substring (support for multiple rows)
         for row in rows:
             query += '('
             for value in row:
-                query = query + '\'' + value + '\'' + ', '
+                if value.isnumeric():
+                    query = query + value + ', '
+                else:
+                    query = query + '\'' + value + '\'' + ', '
             query = query[:-2] + '), '
         query = query[:-2] + ';'
 
         logging.debug('Query: %s' % query)
-        print(query)
         self.cursor.execute(query)
         self.conn.commit()

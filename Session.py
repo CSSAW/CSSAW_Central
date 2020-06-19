@@ -19,8 +19,9 @@ class Session:
         self.cursor = self.conn.cursor(dictionary=True, buffered=True)
 
     def __del__(self):
-        self.cursor.close()
-        self.conn.close()
+        pass
+        #self.cursor.close()
+        #self.conn.close()
 
     def execute_SQL(self, filename):
         """ execute .SQL file of commands """
@@ -49,14 +50,17 @@ class Session:
         query = 'INSERT INTO %s ' % table + '('
 
         for column in columns:
-            query = query = column + ', '
-        query = query - ', ' + ') VALUES '
+            query = query + column + ', '
+        query = query[:-2] + ') VALUES '
 
         for row in rows:
             query += '('
             for value in row:
-                query = query + value + ', '
-            query = query - ', ' + '), '
+                query = query + '\'' + value + '\'' + ', '
+            query = query[:-2] + '), '
+        query = query[:-2] + ';'
 
         logging.debug('Query: %s' % query)
+        print(query)
         self.cursor.execute(query)
+        self.conn.commit()

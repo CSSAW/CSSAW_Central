@@ -48,7 +48,7 @@ class Session:
         # execute and commit query
         self.conn.execute(query, values_list)
 
-    def insert_from_CSV(self, filename, table):
+    def insert_from_CSV(self, filename, table, primary_key):
         with open(filename, 'r') as f:
 
             # pull headers
@@ -65,4 +65,29 @@ class Session:
                 self.insert(table, headers, rows)
             except:
                 logging.error('Insert failed for file: %s' % filename)
-                
+
+    def create_table(self, table_name, columns, types, primary_key_flags):
+        """ Creates table from given parameters 
+        
+            args:
+                table_name ---- name of table
+                columns ---- list of columns
+                types ---- list of column types
+                primary_key_flags ---- list of bools denoting whether column is primary key
+
+        """
+        
+        meta = alc.MetaData()
+
+        table = alc.Table(
+            table_name, meta,
+            *(alc.Column(column_name, column_type,
+                    primary_key=columns)
+            for column_name,
+            column_type,
+            primary_key_flag in zip(
+                                columns,
+                                types,
+                                primary_key_flags)))
+            
+        table.create()

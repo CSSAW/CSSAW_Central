@@ -6,3 +6,11 @@
 
 # host ip
 host.txt
+
+# cache
+/__pycache__/
+/.pytest_cache/
+/.cache/
+
+# test
+*.pyc

@@ -42,3 +42,21 @@ class Session:
                 self.cursor.execute(command)
             except mysql.connector.OperationalError:
                 logging.error('Operation \"' + command + '\" failed, skipping...')
+
+    def insert(self, table, columns, rows):
+        """ insert given rows into given table """
+
+        query = 'INSERT INTO %s ' % table + '('
+
+        for column in columns:
+            query = query = column + ', '
+        query = query - ', ' + ') VALUES '
+
+        for row in rows:
+            query += '('
+            for value in row:
+                query = query + value + ', '
+            query = query - ', ' + '), '
+
+        logging.debug('Query: %s' % query)
+        self.cursor.execute(query)

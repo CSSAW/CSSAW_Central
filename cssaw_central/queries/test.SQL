@@ -1,0 +1,1 @@
+﻿SELECT TOP 1 column1 FROM test_table;

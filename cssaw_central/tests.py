@@ -14,7 +14,7 @@ class tests(unittest.TestCase):
 
     def test_insert(self):
         try:
-            self.sess.insert('test_table ', ['column1', 'column2'], ['6/19/2020', 'test'])
+            self.sess.insert('test_table', ['column1', 'column2'], [['6/19/2020', 'test']])
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('Insert Error: ', e)
             quit()
@@ -45,3 +45,4 @@ if __name__ == '__main__':
     test.test_insert()
     test.test_insert_CSV()
     test.test_execute_SQL()
+    print('Test SUCCESS')

@@ -1,7 +1,6 @@
-import mysql.connector
 import sqlalchemy as alc
-from mysql.connector.errors import OperationalError
 import logging
+import pandas as pd
 
 class Session:
     def __init__(self, user, password, host, db='Test'):
@@ -54,69 +53,30 @@ class Session:
             args:
                 table ---- name of table to insert into
                 columns ---- list of column names
-                rows ---- list of values to put into corresponding columns
+                rows ---- list of lists of values to put into corresponding columns
 
                 len(columns) MUST EQUAL len(rows)
         """
-
-        # query type
-        query = alc.insert(table)
-
-        # build list of rows to insert
-        values_list = []
-        for row in rows:
-            values_list.append(dict(zip(columns, row)))
-
-        # execute and commit query
-        self.conn.execute(query, values_list)
+        df = pd.DataFrame(data=rows, columns=columns)
+        
+        try:
+            df.to_sql(table, self.conn, if_exists='append', index=False)
+        except ValueError as e:
+            print(e)
+            quit()
 
     def insert_from_CSV(self, filename, table):
-        """ Inserts entire CSV file into specified table
+        """ Inserts entire CSV file into specified table.
+            Creates table if it doesn't already exist.
 
             args:
                 filename ---- file path of data to upload
                 table ---- name of table to insert into
 
         """
-        with open(filename, 'r') as f:
-
-            # pull headers
-            headers = f.readline().split(',')
-
-            # get csv rows
-            lines = f.readlines()
-
-            # convert rows into list of lists
-            rows = [[x.strip()] for x in line.split(',') for line in lines]
-
-            # user insert member function to insert
-            try:
-                self.insert(table, headers, rows)
-            except:
-                logging.error('Insert failed for file: %s' % filename)
-
-    def create_table(self, table_name, columns, types, primary_key_flags):
-        """ Creates table from given parameters 
-        
-            args:
-                table_name ---- name of table
-                columns ---- list of columns
-                types ---- list of column types
-                primary_key_flags ---- list of bools denoting whether column is primary key
-
-        """
-        
-        meta = alc.MetaData()
-
-        table = alc.Table(
-            table_name, meta,
-            *(alc.Column(column_name, column_type,
-                    primary_key=columns)
-            for column_name,
-            column_type,
-            primary_key_flag in zip(
-                                columns,
-                                types,
-                                primary_key_flags)))
-            
-        table.create()
+        df = pd.read_csv(filename)
+        try:
+            sql = df.to_sql(table, self.engine, if_exists='append', index=False)
+        except ValueError as e:
+            print(e)
+            quit() 

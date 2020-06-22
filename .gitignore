@@ -11,6 +11,7 @@ host.txt
 /__pycache__/
 /.pytest_cache/
 /.cache/
+/*/__pycache__/
 
 # test
 *.pyc

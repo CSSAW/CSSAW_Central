@@ -18,3 +18,8 @@ host.txt
 
 # env
 /env/
+
+# dist
+/dist/
+*.egg-info
+/build/

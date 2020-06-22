@@ -48,7 +48,8 @@ class Session:
         return results
 
     def insert(self, table, columns, rows):
-        """ insert given rows into given table 
+        """ insert given rows into given table.
+            Creates table if it doesn't already exist.
         
             args:
                 table ---- name of table to insert into

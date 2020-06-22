@@ -19,6 +19,11 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Development Status :: 5 - Production/Stable",
     ],
+    entry_points={
+        'console_scripts': [
+            'csvsql = cssaw_central.csvsql:main'
+        ]
+    },
     python_requires='>=3.6',
     install_requires=[
         'numpy==1.19.0',

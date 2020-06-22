@@ -77,7 +77,7 @@ class Session:
         """
         df = pd.read_csv(filename)
         try:
-            sql = df.to_sql(table, self.engine, if_exists='append', index=False)
+            df.to_sql(table, self.engine, if_exists='append', index=False)
         except ValueError as e:
             print(e)
             quit() 

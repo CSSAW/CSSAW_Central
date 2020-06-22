@@ -2,7 +2,7 @@
 
 ## Installation
 ``` Bash
-pip install CSSAW-Central
+pip install cssaw_central
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ sess.insert('test_table', ['column1', 'column2', 'column3'], [0, 1, 2])
 print(sess.execute_SQL('./queries/test.sql'))
 ```
 
-The above script will create a connection to the Test database at localhost:3306 (assuming that it exists), insert the given values into their appropriate columns in test_table, and then execute test.sql from the queries file, which in this case selects the first value in column1 that has just been added.
+The above script will create a connection to the Test database at localhost:3306 (assuming that it exists), insert the given values into their appropriate columns in test_table, and then execute test.sql from the queries file.
 
 # To Do:
 - Stripped implementation of SELECT

@@ -2,7 +2,7 @@
 
 ## Installation
 ``` Bash
-pip install cssaw_central
+pip install cssaw-central
 ```
 
 ## Usage

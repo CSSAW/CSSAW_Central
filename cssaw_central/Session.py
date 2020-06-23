@@ -16,6 +16,8 @@ class Session:
         """
         self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db))
 
+        self.meta = MetaData(self.engine)
+
         self.conn = self.engine.connect()
 
     def execute_SQL(self, filename):

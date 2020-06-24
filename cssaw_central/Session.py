@@ -1,6 +1,7 @@
 import sqlalchemy as alc
 import logging
 import pandas as pd
+import datetime as dt
 
 class Session:
     def __init__(self, user, password, host, db='Test'):
@@ -16,9 +17,11 @@ class Session:
         """
         self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db), echo=True)
 
-        self.meta = MetaData(self.engine)
+        self.meta = alc.MetaData(self.engine)
 
         self.conn = self.engine.connect()
+
+        self.type_dict = {float : alc.types.Float, int : alc.types.Integer, str : alc.types.String(length=32)}
 
     def execute_SQL(self, filename):
         """ execute .SQL file of commands 
@@ -61,12 +64,16 @@ class Session:
                 len(columns) MUST EQUAL len(rows)
         """
 
+        types = []
+        for item in rows[0]:
+            type(item)
+
         # create dataframe
         df = pd.DataFrame(data=rows, columns=columns)
 
         # if table doesn't exist, create
-        if not self.engine.has_table(self.conn, table):
-            self.create_table(df)
+        if not self.engine.has_table(table):
+            self.create_table(columns, types)
         
         # insert
         try:
@@ -88,8 +95,15 @@ class Session:
         # create 
         df = pd.read_csv(filename)
 
-        if not self.engine.has_table(self.conn, table):
-            self.create_table(df)
+        types = []
+        print(df.iloc[0])
+        for item in df.iloc[0]:
+            types.append(type(item))
+
+        print(types)
+
+        if not self.engine.has_table(table):
+            self.create_table(df.columns, types)
 
         try:
             df.to_sql(table, self.engine, if_exists='append', index=False)
@@ -97,21 +111,22 @@ class Session:
             print(e)
             quit() 
 
-    def create_table(self, table, dataframe):
+    def create_table(self, table, columns, types):
         """ create table from given dataframe
 
             args:
                 dataframe ---- dataframe to base table off of
         """
 
+        print(columns)
+        print(types)
+        print(list(zip(columns, types)))
+
         # create table with dataframe data
         sql_table = alc.Table(
             table, self.meta,
-            alc.Column('id', alc.Integer, primary_key=True)
-            *(alc.Column(
-                column_name, column_type)
-                for column_name, column_type
-                in zip(columns, list(dataframe.dtypes))))
+            alc.Column('id', alc.Integer, primary_key=True),
+            *(alc.Column(column_name, self.type_dict[column_type]) for column_name, column_type in zip(columns, types)))
 
         # create table in database
         self.meta.create_all(self.engine)

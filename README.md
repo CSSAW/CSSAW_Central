@@ -7,9 +7,21 @@ pip install cssaw-central
 
 ## Usage
 
+### csvsql script
+
+The package comes with a script to automatically upload a csv file to the given table in a sql database. It takes user, pass, host IP, database, table, and cSV file path as arguments
+
+#### example
+``` Bash
+csvsql test test HOST Test test_table ./TestDocs/test.csv
+```
+
+The above example connects to the Test database using the test user and inserts the test.csv file into test_table.
+
+### Session module
 Session object acts as a wrapper for sqlalchemy connection. The connection is created and stored in the Session object at initialization, and any results can be taken from the self.conn object or, if using execute_sql(), can be taken from the returned results python list.
 
-### Example:
+#### Example:
 ```Python
 from cssaw_central import Session
 

@@ -97,7 +97,7 @@ class Session:
             print(e)
             quit() 
 
-    def create_table(self, dataframe):
+    def create_table(self, table, dataframe):
         """ create table from given dataframe
 
             args:

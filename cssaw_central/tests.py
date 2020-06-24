@@ -51,6 +51,20 @@ class tests(unittest.TestCase):
             print('Create table error: ', e)
             quit()
 
+    def test_insert_CSV_create_table(self):
+        df = pd.read_csv('./TestDocs/test.csv')
+        types=[]
+        for item in df.iloc[0]:
+            types.append(type(item))
+
+        try:
+            self.sess.insert_from_CSV('./TestDocs/test.csv', 'test_create_from_insert')
+            print('Table created')
+            self.sess.conn.execute("""DROP TABLE test_create_from_insert""")
+        except sqlalchemy.exc.SQLAlchemyError as e:
+            print('Insert and create error: ', e)
+            quit()
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('host', help='Host IP for test')
@@ -64,4 +78,5 @@ if __name__ == '__main__':
     test.test_insert_CSV()
     test.test_execute_SQL()
     test.test_create_table()
+    test.test_insert_CSV_create_table()
     print('Test SUCCESS')

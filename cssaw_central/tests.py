@@ -3,6 +3,7 @@ from Session import Session
 import unittest
 import argparse
 import sqlalchemy
+import pandas as pd
 
 class tests(unittest.TestCase):
 
@@ -11,10 +12,12 @@ class tests(unittest.TestCase):
 
     def test_connect(self):
         assert(not self.sess.conn.closed)
+        print('Connect success')
 
     def test_insert(self):
         try:
             self.sess.insert('test_table', ['column1', 'column2'], [['6/19/2020', 'test']])
+            print('insert success')
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('Insert Error: ', e)
             quit()
@@ -22,6 +25,7 @@ class tests(unittest.TestCase):
     def test_insert_CSV(self):
         try:
             self.sess.insert_from_CSV('./TestDocs/test.csv', 'test_table')
+            print('csv success')
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('CSV Error: ', e)
             quit()
@@ -29,8 +33,22 @@ class tests(unittest.TestCase):
     def test_execute_SQL(self):
         try:
             self.sess.execute_SQL('./queries/test.sql')
+            print('sql_success')
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('SQL Error: ', e)
+            quit()
+
+    def test_create_table(self):
+        df = pd.read_csv('./TestDocs/test.csv')
+        types=[]
+        for item in df.iloc[0]:
+            types.append(type(item))
+
+        try:
+            self.sess.create_table('test_create', list(df.columns), types)
+            print('Table creation success')
+        except sqlalchemy.exc.SQLAlchemyError as e:
+            print('Create table error: ', e)
             quit()
 
 if __name__ == '__main__':
@@ -45,4 +63,5 @@ if __name__ == '__main__':
     test.test_insert()
     test.test_insert_CSV()
     test.test_execute_SQL()
+    test.test_create_table()
     print('Test SUCCESS')

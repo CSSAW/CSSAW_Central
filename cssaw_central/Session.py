@@ -14,7 +14,7 @@ class Session:
             kwargs:
                 db ---- database to connect to (defaults to test)
         """
-        self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db))
+        self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db), echo=True)
 
         self.meta = MetaData(self.engine)
 
@@ -60,7 +60,11 @@ class Session:
 
                 len(columns) MUST EQUAL len(rows)
         """
+
         df = pd.DataFrame(data=rows, columns=columns)
+
+        if not alc.engine.Dialect.has_table(self.conn, table):
+            self.create_table(df)
         
         try:
             df.to_sql(table, self.conn, if_exists='append', index=False)
@@ -83,3 +87,21 @@ class Session:
         except ValueError as e:
             print(e)
             quit() 
+
+    def create_table(self, dataframe):
+        """ create table from given dataframe
+
+            args:
+                dataframe ---- dataframe to base table off of
+        """
+
+        # create table with dataframe data
+        sql_table = alc.Table(
+            table, self.meta,
+            *(alc.Column(
+                column_name, column_type)
+                for column_name, column_type
+                in zip(columns, list(dataframe.dtypes))))
+
+        # create table in database
+        self.meta.create_all(self.engine)

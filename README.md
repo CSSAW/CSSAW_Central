@@ -11,6 +11,23 @@ pip install cssaw-central
 
 The package comes with a script to automatically upload a csv file to the given table in a sql database. It takes user, pass, host IP, database, table, and cSV file path as arguments
 
+#### csvsql -h
+
+``` Console
+    usage: csvsql [-h] user password host database table filename
+
+    positional arguments:
+        user        user for database login
+        password    password for login if necessary
+        host        host IP for database
+        database    database to run queries on
+        table       table to insert into (will create new if doesn't exist)
+        filename    filepath of CSV file to insert
+
+    optional arguments:
+        -h, --help  show this help message and exit
+```
+
 #### example
 ``` Bash
 csvsql test test HOST Test test_table ./TestDocs/test.csv

@@ -66,7 +66,10 @@ class Session:
 
         types = []
         for item in rows[0]:
-            type(item)
+            if type(item).__module__ == 'numpy':
+                types.append(type(item.item()))
+            else:
+                types.append(type(item))
 
         # create dataframe
         df = pd.DataFrame(data=rows, columns=columns)
@@ -96,11 +99,11 @@ class Session:
         df = pd.read_csv(filename)
 
         types = []
-        print(df.iloc[0])
         for item in df.iloc[0]:
-            types.append(type(item))
-
-        print(types)
+            if type(item).__module__ == 'numpy':
+                types.append(type(item.item()))
+            else:
+                types.append(type(item))
 
         if not self.engine.has_table(table):
             self.create_table(table, df.columns, types)

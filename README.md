@@ -28,18 +28,13 @@ from cssaw_central import Session
 sess = Session('test','test', 'localhost', db='Test')
 
 sess.create_table('test_table', ['column1', 'column2', 'column3'], \ 
-                    ['int', 'int', 'int'], ['True', 'False', 'False'])
+                    [int, int, int])
 
 sess.insert('test_table', ['column1', 'column2', 'column3'], [0, 1, 2])
 print(sess.execute_SQL('./queries/test.sql'))
 ```
 
 The above script will create a connection to the Test database at localhost:3306 (assuming that it exists), insert the given values into their appropriate columns in test_table, and then execute test.sql from the queries file.
-
-# To Do:
-- Stripped implementation of SELECT
-- Stripped implementation of UPDATE
-- Stripped implementation of JOIN
 
 # License
 [MPL-2.0](https://opensource.org/licenses/MPL-2.0)

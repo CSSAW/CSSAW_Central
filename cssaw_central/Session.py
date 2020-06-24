@@ -117,11 +117,7 @@ class Session:
             args:
                 dataframe ---- dataframe to base table off of
         """
-
-        print(columns)
-        print(types)
-        print(list(zip(columns, types)))
-
+        
         # create table with dataframe data
         sql_table = alc.Table(
             table, self.meta,

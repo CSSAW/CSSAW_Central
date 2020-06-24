@@ -61,11 +61,14 @@ class Session:
                 len(columns) MUST EQUAL len(rows)
         """
 
+        # create dataframe
         df = pd.DataFrame(data=rows, columns=columns)
 
-        if not alc.engine.Dialect.has_table(self.conn, table):
+        # if table doesn't exist, create
+        if not self.engine.has_table(self.conn, table):
             self.create_table(df)
         
+        # insert
         try:
             df.to_sql(table, self.conn, if_exists='append', index=False)
         except ValueError as e:
@@ -81,7 +84,13 @@ class Session:
                 table ---- name of table to insert into
 
         """
+
+        # create 
         df = pd.read_csv(filename)
+
+        if not self.engine.has_table(self.conn, table):
+            self.create_table(df)
+
         try:
             df.to_sql(table, self.engine, if_exists='append', index=False)
         except ValueError as e:
@@ -98,6 +107,7 @@ class Session:
         # create table with dataframe data
         sql_table = alc.Table(
             table, self.meta,
+            alc.Column('id', alc.Integer, primary_key=True)
             *(alc.Column(
                 column_name, column_type)
                 for column_name, column_type

@@ -73,7 +73,7 @@ class Session:
 
         # if table doesn't exist, create
         if not self.engine.has_table(table):
-            self.create_table(columns, types)
+            self.create_table(table, columns, types)
         
         # insert
         try:
@@ -103,7 +103,7 @@ class Session:
         print(types)
 
         if not self.engine.has_table(table):
-            self.create_table(df.columns, types)
+            self.create_table(table, df.columns, types)
 
         try:
             df.to_sql(table, self.engine, if_exists='append', index=False)

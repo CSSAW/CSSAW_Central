@@ -16,7 +16,7 @@ class tests(unittest.TestCase):
 
     def test_insert(self):
         try:
-            self.sess.insert('test_table', ['column1', 'column2'], [['6/19/2020', 'test']])
+            self.sess.insert('test_table', ['column1', 'column2'], [['6/19/2020', 'test']], False)
             print('insert success')
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('Insert Error: ', e)
@@ -24,7 +24,7 @@ class tests(unittest.TestCase):
 
     def test_insert_CSV(self):
         try:
-            self.sess.insert_from_CSV('./TestDocs/test.csv', 'test_table')
+            self.sess.insert_from_CSV('./TestDocs/test.csv', 'test_table', True)
             print('csv success')
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('CSV Error: ', e)
@@ -58,7 +58,7 @@ class tests(unittest.TestCase):
             types.append(type(item))
 
         try:
-            self.sess.insert_from_CSV('./TestDocs/test_create_insert.csv', 'test_create_from_insert')
+            self.sess.insert_from_CSV('./TestDocs/test_create_insert.csv', 'test_create_from_insert', True)
             self.sess.conn.execute("""DROP TABLE test_create_from_insert""")
         except sqlalchemy.exc.SQLAlchemyError as e:
             print('Insert and create error: ', e)

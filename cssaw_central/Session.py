@@ -21,7 +21,7 @@ class Session:
 
         self.conn = self.engine.connect()
 
-        self.type_dict = {float : alc.types.Float, int : alc.types.Integer, str : alc.types.String(length=32)}
+        self.type_dict = {float : alc.types.Float, int : alc.types.Integer, str : alc.types.String(length=50)}
 
     def execute_SQL(self, filename):
         """ execute .SQL file of commands 

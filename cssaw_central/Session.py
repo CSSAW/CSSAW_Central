@@ -52,7 +52,7 @@ class Session:
 
         return results
 
-    def insert(self, table, columns, rows):
+    def insert(self, table, columns, rows, overwrite):
         """ insert given rows into given table.
             Creates table if it doesn't already exist.
         
@@ -60,6 +60,7 @@ class Session:
                 table ---- name of table to insert into
                 columns ---- list of column names
                 rows ---- list of lists of values to put into corresponding columns
+                overwrite ---- bool denoting whether to overwrite or append to table
 
                 len(columns) MUST EQUAL len(rows)
         """

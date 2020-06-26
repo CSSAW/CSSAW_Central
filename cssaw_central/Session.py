@@ -81,18 +81,22 @@ class Session:
         
         # insert
         try:
-            df.to_sql(table, self.conn, if_exists='append', index=False)
+            if overwrite:
+                df.to_sql(table, self.engine, if_exists='replace', index=False)
+            else:
+                df.to_sql(table, self.engine, if_exists='append', index=False)
         except ValueError as e:
             print(e)
             quit()
 
-    def insert_from_CSV(self, filename, table):
+    def insert_from_CSV(self, filename, table, overwrite):
         """ Inserts entire CSV file into specified table.
             Creates table if it doesn't already exist.
 
             args:
                 filename ---- file path of data to upload
                 table ---- name of table to insert into
+                overwrite ---- bool denoting whether to overwrite or append table
 
         """
 
@@ -112,7 +116,10 @@ class Session:
             self.create_table(table, df.columns, types)
 
         try:
-            df.to_sql(table, self.engine, if_exists='append', index=False)
+            if overwrite:
+                df.to_sql(table, self.engine, if_exists='replace', index=False)
+            else:
+                df.to_sql(table, self.engine, if_exists='append', index=False)
         except ValueError as e:
             print(e)
             quit() 

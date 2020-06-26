@@ -64,6 +64,7 @@ class Session:
                 len(columns) MUST EQUAL len(rows)
         """
 
+        # determine if numpy or python type and convert accordingly
         types = []
         for item in rows[0]:
             if type(item).__module__ == 'numpy':
@@ -98,6 +99,7 @@ class Session:
         # create 
         df = pd.read_csv(filename)
 
+        # determine if numpy or python type and convert accordingly
         types = []
         for item in df.iloc[0]:
             if type(item).__module__ == 'numpy':
@@ -105,6 +107,7 @@ class Session:
             else:
                 types.append(type(item))
 
+        # create table if necessary
         if not self.engine.has_table(table):
             self.create_table(table, df.columns, types)
 

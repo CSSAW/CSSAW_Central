@@ -64,6 +64,11 @@ class tests(unittest.TestCase):
             print('Insert and create error: ', e)
             quit()
 
+    def test_select(self):
+        result = self.sess.select(['test'], conditions={'column1': ('test', '==', '6/19/2020')})
+
+        assert result['column1'] == '6/19/2020'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('host', help='Host IP for test')
@@ -78,4 +83,5 @@ if __name__ == '__main__':
     test.test_execute_SQL()
     test.test_create_table()
     test.test_insert_CSV_create_table()
+    test.test_select()
     print('Test SUCCESS')

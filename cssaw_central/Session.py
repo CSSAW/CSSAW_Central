@@ -141,24 +141,33 @@ class Session:
         # create table in database
         self.meta.create_all(self.engine)
 
-    def select(self, table, conditions=None):
+    def select(self, tables, conditions={}):
         """ Select elements with corresponding row and column values
 
             args:
-                table ---- list of tables to select elements from
+                tables ---- list of tables to select elements from
 
             kwargs:
                 conditions ---- dictionary of column names and conditions.
-                                conditions are represented as two-tuple of 
-                                operation and operand value. 
+                                conditions are represented as a three-tuple of 
+                                table, operation and operand value.
             
-            example: Session.select(test, {column1: ('>', '1')})
+            example: Session.select(['test'], {'id': ('test', '>', '1')})
+            
         """
-        pass
+        
+        # create query in specified tables
+        query = alc.sql.select(tables)
+        
+        # for each column to select, 
+        for column in conditions:
+            query = query.where(comp_string_to_op(column[1])(getattr(getattr(self.meta.tables, column[0]), column), column[2]))
+
+        # return results
+        return self.conn.execute(query)
 
 def comp_string_to_op(string):
     """ Converts string of expression to sqlalchemy binaryexpression
-
     """
 
     ops = {

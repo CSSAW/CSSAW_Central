@@ -140,3 +140,40 @@ class Session:
 
         # create table in database
         self.meta.create_all(self.engine)
+
+    def select(self, table, conditions=None):
+        """ Select elements with corresponding row and column values
+
+            args:
+                table ---- list of tables to select elements from
+
+            kwargs:
+                conditions ---- dictionary of column names and conditions.
+                                conditions are represented as two-tuple of 
+                                operation and operand value. 
+            
+            example: Session.select(test, {column1: ('>', '1')})
+        """
+        pass
+
+def comp_string_to_op(string):
+    """ Converts string of expression to sqlalchemy binaryexpression
+
+    """
+
+    ops = {
+        '+' : operator.add,
+        '-' : operator.sub,
+        '*' : operator.mul,
+        '/' : operator.truediv,
+        '%' : operator.mod,
+        '^' : operator.xor,
+        '>' : operator.gt,
+        '>=' : operator.ge,
+        '<' : operator.lt,
+        '<=' : operator.le,
+        '==' : operator.eq,
+        '!=' : operator.ne
+    }
+
+    return ops[string]

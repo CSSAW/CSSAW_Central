@@ -3,6 +3,8 @@ import logging
 import pandas as pd
 import datetime as dt
 
+import operator
+
 class Session:
     def __init__(self, user, password, host, db='Test'):
         """ Initialize connection to database
@@ -141,7 +143,7 @@ class Session:
         # create table in database
         self.meta.create_all(self.engine)
 
-    def select(self, tables, conditions={}):
+    def select(self, query_tables, conditions={}):
         """ Select elements with corresponding row and column values
 
             args:
@@ -156,18 +158,21 @@ class Session:
             
         """
 
-        for table in tables:
-            table = self.meta.tables[table]
+        # create table objects out of table names
+        self.meta.reflect(self.engine)
+        tables = []
+        for table in query_tables:
+            tables.append(self.meta.tables[table])
 
         # create query in specified tables
         query = alc.sql.select(tables)
         
-        # for each column to select, 
+        # add condition for each column to select
         for column in conditions:
-            query = query.where(comp_string_to_op(column[1])(getattr(getattr(self.meta.tables, column[0]), column), column[2]))
+            query = query.where(comp_string_to_op(conditions[column][1])(self.meta.tables[conditions[column][0]].columns[column], conditions[column][2]))
 
         # return results
-        return self.conn.execute(query)
+        return self.conn.execute(query).fetchall()
 
 def comp_string_to_op(string):
     """ Converts string of expression to sqlalchemy binaryexpression

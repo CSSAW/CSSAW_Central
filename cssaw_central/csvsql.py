@@ -10,7 +10,7 @@ def main():
     parser.add_argument('database', help='database to run queries on')
     parser.add_argument('table', help='table to insert into (will create new if doesn\'t exist)')
     parser.add_argument('filename', help='filepath of CSV file to insert')
-    parser.add_argument('--overwrite', action='store_true', 'help='Overwrite already-present table in database')
+    parser.add_argument('--overwrite', action='store_true', help='Overwrite already-present table in database')
     args = parser.parse_args()
 
     # create session for login

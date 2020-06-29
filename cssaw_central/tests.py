@@ -65,9 +65,9 @@ class tests(unittest.TestCase):
             quit()
 
     def test_select(self):
-        result = self.sess.select(['test'], conditions={'column1': ('test', '==', '6/19/2020')})
+        result = self.sess.select(['test_table'], conditions={'column1': ('test_table', '==', '6/19/2020')})
 
-        assert result['column1'] == '6/19/2020'
+        assert result[0][0] == '6/19/2020'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -171,12 +171,6 @@ def comp_string_to_op(string):
     """
 
     ops = {
-        '+' : operator.add,
-        '-' : operator.sub,
-        '*' : operator.mul,
-        '/' : operator.truediv,
-        '%' : operator.mod,
-        '^' : operator.xor,
         '>' : operator.gt,
         '>=' : operator.ge,
         '<' : operator.lt,

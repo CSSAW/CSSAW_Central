@@ -155,7 +155,10 @@ class Session:
             example: Session.select(['test'], {'id': ('test', '>', '1')})
             
         """
-        
+
+        for table in tables:
+            table = self.meta.tables[table]
+
         # create query in specified tables
         query = alc.sql.select(tables)
         

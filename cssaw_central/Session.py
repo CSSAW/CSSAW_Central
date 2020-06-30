@@ -15,7 +15,7 @@ class Session:
                 host ---- host ip to connect to
 
             kwargs:
-                db ---- database to connect to (defaults to test)
+                db ---- database to connect to (defaults to Test)
         """
         self.engine = alc.create_engine("mysql+pymysql://{}:{}@{}/{}".format(user, password, host, db), echo=True)
 
@@ -131,7 +131,9 @@ class Session:
         """ create table from given dataframe
 
             args:
-                dataframe ---- dataframe to base table off of
+                table ---- name of table to be created
+                columns ---- list of column names
+                types ---- list of types for the columns
         """
         
         # create table with dataframe data
@@ -147,7 +149,7 @@ class Session:
         """ Select elements with corresponding row and column values
 
             args:
-                tables ---- list of tables to select elements from
+                query_tables ---- list of tables to select elements from
 
             kwargs:
                 conditions ---- dictionary of column names and conditions.

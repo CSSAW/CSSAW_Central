@@ -2,6 +2,7 @@ import sqlalchemy as alc
 import logging
 import pandas as pd
 import datetime as dt
+import os
 
 import operator
 
@@ -126,6 +127,24 @@ class Session:
         except ValueError as e:
             print(e)
             quit() 
+
+    def insert_directory(self, directory, table, overwrite):
+        """Insert all csv files from directory into table.
+
+        Args:
+            directory (string): directory to insert
+            table (string): table to insert into
+            overwrite (bool): If true, overwrite table in sql database. If false, append.
+        """
+
+        # iterate over filenames and insert CSVs as found
+        for filename in os.listdir(directory):
+            if filename.endswith('.csv'):
+                path = os.path.join(directory, filename)
+                self.insert_from_CSV(path, table, overwrite)
+
+                # reassign overwrite so that insert_from_CSV doesn't overwrite on each insert
+                overwrite = False
 
     def create_table(self, table, columns, types):
         """ create table from given dataframe

@@ -17,15 +17,16 @@ The package comes with a script to automatically upload a csv file to the given 
     usage: csvsql [-h] user password host database table filename
 
     positional arguments:
-        user        user for database login
-        password    password for login if necessary
-        host        host IP for database
-        database    database to run queries on
-        table       table to insert into (will create new if doesn't exist)
-        filename    filepath of CSV file to insert
+        user         user for database login
+        password     password for login if necessary
+        host         host IP for database
+        database     database to run queries on
+        table        table to insert into (will create new if doesn't exist)
+        filename     filepath of CSV file to insert
 
     optional arguments:
-        -h, --help  show this help message and exit
+        -h, --help   show this help message and exit
+        --overwrite  Overwrite already-present table in database
 ```
 
 #### example

@@ -64,6 +64,12 @@ class tests(unittest.TestCase):
             print('Insert and create error: ', e)
             quit()
 
+    def test_insert_dir(self):
+        try:
+            self.sess.insert_directory('./TestDocs/dir/', 'test_dir_insert', True)
+        except:
+            print('Error inserting directory')
+
     def test_select(self):
         result = self.sess.select(['test_table'], conditions={'column1': ('test_table', '==', '6/19/2020')})
 

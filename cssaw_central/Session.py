@@ -54,6 +54,7 @@ class Session:
                 logging.error('Operation \"' + command + '\" failed, skipping...')
 
         return results
+
     def execute_query(self, command):
         """ execute one line sql commands 
         
@@ -61,6 +62,7 @@ class Session:
                 command ---- a one line sql query 
         """
         return self.conn.execute(alc.sql.text(command))
+        
     def insert(self, table, columns, rows, overwrite):
         """ insert given rows into given table.
             Creates table if it doesn't already exist.

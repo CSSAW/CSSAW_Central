@@ -195,6 +195,12 @@ class Session:
         # return results
         return self.conn.execute(query).fetchall()
 
+    def rename_table(self, old, new){
+        """Rename an existing table in the database
+        """
+        self.conn.execute(alc.sql.text('ALTER TABLE ' + old + ' RENAME TO ' + new))
+    }
+
 def comp_string_to_op(string):
     """ Converts string of expression to sqlalchemy binaryexpression
     """

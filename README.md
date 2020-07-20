@@ -41,9 +41,9 @@ Session object acts as a wrapper for sqlalchemy connection. The connection is cr
 
 #### Example:
 ```Python
-from cssaw_central import Session
+from cssaw_central.Session import Session
 
-sess = Session('test','test', 'localhost', db='Test')
+sess = Session('username','password', 'localhost', db='Test')
 
 sess.create_table('test_table', ['column1', 'column2', 'column3'], \ 
                     [int, int, int])

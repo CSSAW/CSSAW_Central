@@ -72,8 +72,11 @@ class tests(unittest.TestCase):
 
     def test_select(self):
         result = self.sess.select(['test_table'], conditions={'column1': ('test_table', '==', '6/19/2020')})
-
         assert result[0][0] == '6/19/2020'
+    def test_execute_query(self):
+        result = self.sess.execute_query("SELECT * FROM `Test`.`test_csvsql` LIMIT 1000;").fetchone()
+        print(result)
+        assert result[1] == '6/19/2020'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -90,4 +93,5 @@ if __name__ == '__main__':
     test.test_create_table()
     test.test_insert_CSV_create_table()
     test.test_select()
+    test.test_execute_query()
     print('Test SUCCESS')

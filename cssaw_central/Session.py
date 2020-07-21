@@ -55,13 +55,20 @@ class Session:
 
         return results
 
-    def execute_query(self, command):
+    def execute_query(self, command, pandas=False):
         """ execute one line sql commands 
         
             args:
                 command ---- a one line sql query 
+
+            kwargs:
+                pandas ---- If true, return dataframe. If false, return resultproxy.
         """
-        return self.conn.execute(alc.sql.text(command))
+
+        if pandas:
+            return pd.read_sql(command, self.conn)
+        else:
+            return self.conn.execute(alc.sql.text(command))
         
     def insert(self, table, columns, rows, overwrite):
         """ insert given rows into given table.
@@ -172,7 +179,7 @@ class Session:
         # create table in database
         self.meta.create_all(self.engine)
 
-    def select(self, query_tables, conditions={}):
+    def select(self, query_tables, conditions={}, pandas=False):
         """ Select elements with corresponding row and column values
 
             args:
@@ -182,6 +189,7 @@ class Session:
                 conditions ---- dictionary of column names and conditions.
                                 conditions are represented as a three-tuple of 
                                 table, operation and operand value.
+                pandas ---- If true, return dataframe. If false, return resultproxy.
             
             example: Session.select(['test'], {'id': ('test', '>', '1')})
             
@@ -201,7 +209,10 @@ class Session:
             query = query.where(comp_string_to_op(conditions[column][1])(self.meta.tables[conditions[column][0]].columns[column], conditions[column][2]))
 
         # return results
-        return self.conn.execute(query).fetchall()
+        if pandas:
+            return pd.read_sql(str(query), self.conn)
+        else:
+            return self.conn.execute(query).fetchall()
 
     def rename_table(self, old, new):
         """Rename an existing table in the database

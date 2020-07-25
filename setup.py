@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cssaw_central",
-    version="1.2.6",
+    version="1.2.7",
     author="Luke Williams",
     author_email="williams.luke.2001@gmail.com",
     description="Access Point Module to CSSAW Database",

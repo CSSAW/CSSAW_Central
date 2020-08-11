@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cssaw_central",
-    version="1.2.7",
+    version="1.3.0",
     author="Luke Williams",
     author_email="williams.luke.2001@gmail.com",
     description="Access Point Module to CSSAW Database",
@@ -26,12 +26,12 @@ setuptools.setup(
     },
     python_requires='>=3.6',
     install_requires=[
-        'numpy==1.19.0',
-        'pandas==1.0.5',
-        'PyMySQL==0.9.3',
-        'python-dateutil==2.8.1',
-        'pytz==2020.1',
-        'six==1.15.0',
-        'SQLAlchemy==1.3.17',
+        'numpy>=1.19.0',
+        'pandas>=1.0.5',
+        'PyMySQL>=0.9.3',
+        'python-dateutil>=2.8.1',
+        'pytz>=2020.1',
+        'six>=1.15.0',
+        'SQLAlchemy>=1.3.17',
     ]
 )
